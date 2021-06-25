@@ -40,3 +40,7 @@ API endpoints for :{
 - Updating and Deleting products } ..ALL provided in the api.php file. The routes are in index.js
 
 Some feature have been removed: including authetication and unit testing
+
+Related Packages:
+1. Vform ( npm install vform)
+2. ObjectFormdata ( npm install object-to-formdata)
