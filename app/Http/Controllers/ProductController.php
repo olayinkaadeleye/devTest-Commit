@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Str;
 
 
 class ProductController extends Controller
@@ -12,22 +13,34 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->get();
-
-        return response()->json($products, 200);
-        //$categories = Category::all()->toArray();
-        //return array_reverse($categories);
+        return response()->json($products,200);
     }
 
   
    
     public function store(Request $request)
     {
+            $this->validate($request, [
+            'name' => 'required|max:255|unique:products,name',
+            'price' => 'required|integer',
+            'image' => 'required|image|max:2048',
+            'description' => 'required',
+            'category_id' => 'required',
+        ]);
     
         $product = new Product([
             'name' => $request->input('name'),
             'slug' => Str::slug($request->name),
+            'price' => $request->price,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
         ]);
-        $product->save();
+        if ($request->image) {
+            $imageName = time() . '_' . uniqid() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('storage/product'), $imageName);
+            $product->image = '/storage/product/' . $imageName;
+            $product->save();
+        }
   
         return response()->json('product successfully added');
     }
@@ -38,16 +51,32 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-     // update post
      public function update($id, Request $request)
      {
 
+        $this->validate($request, [
+            'name' => 'required|max:255|unique:products,name',
+            'price' => 'required|integer',
+            'image' => 'required|image|max:2048',
+            'description' => 'required',
+            'category_id' => 'required',
+        ]);
+    
          $product = Product::find($id);
          $product->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'price' => $request->price,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
         ]);
-   
+        if ($request->image) {
+            $imageName = time() . '_' . uniqid() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('storage/product'), $imageName);
+            $product->image = '/storage/product/' . $imageName;
+            $product->save();
+        }
+        
          return response()->json('product successfully updated');
      }
   

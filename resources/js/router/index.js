@@ -45,7 +45,7 @@ const routes = new VueRouter({
             name :'product-list',
         },
         {
-            path: '/add',
+            path: '/create',
             component: CreateProduct, 
             name :'create-product',
         },

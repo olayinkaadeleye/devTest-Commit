@@ -11,8 +11,8 @@ Route::group(['prefix' => 'category'], function () {
     Route::delete('delete/{id}', [CategoryController::class, 'delete']);
 });
 Route::get('products', [ProductController::class, 'index']);
-Route::group(['prefix' => 'products'], function () {
-    Route::post('/add', [ProductController::class, 'store']);
+Route::group(['prefix' => 'product'], function () {
+    Route::post('create', [ProductController::class, 'store']);
     Route::get('edit/{id}', [ProductController::class, 'edit']);
     Route::post('update/{id}', [ProductController::class, 'update']);
     Route::delete('delete/{id}', [ProductController::class, 'delete']);
